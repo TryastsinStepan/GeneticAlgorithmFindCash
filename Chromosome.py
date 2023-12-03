@@ -1,8 +1,11 @@
-genes = '' #Поле для хранения генетической информации хромосомы
-def Ghromosome(gen): #Функция Chromosome, принимающий строку генов и инициализирующий хромосому
-    genes = gen
-
-def print_chromosome():
-    print("This is chromosome")
+class Chromosome:
+    def __init__(self,genes):
+        self.genes = genes
+    def get_genes(self):
+        return self.genes
+    def set_genes(self,genes:str):
+        self.genes = genes
+    def print_chromosome(self):
+        print("This is chromosome")
 
 

@@ -1,5 +1,6 @@
 import GlobalParameters
 import Chromosome
+import ChromosomeHelper
 weight1 = 0
 weight2 = 0
 weight3 = 0
@@ -10,7 +11,7 @@ class Individual:
         self.weight3 = weight3
         self.fitness = self.calculate_fitness()
         chromosome_string = ChromosomeHelper.encode_individual_to_chromosome(self)
-        self.chromosome = Chromosome(chromosome_string)
+        self.chromosome = Chromosome.Chromosome(chromosome_string)
 
     def calculate_fitness(self):
         fitness = ((self.weight1 / 100) * GlobalParameters.E1) + \

@@ -1,6 +1,6 @@
 import random
 import GlobalParameters
-import Individual
+from Individual import  *
 import ChromosomeHelper
 
 class Population:
@@ -9,6 +9,8 @@ class Population:
         self.individuals = []
         self.random = random
         self.population_size = GlobalParameters.POPULATION_SIZE
+        self.maxpoints = {}
+        self.avgpoints = {}
 
     def initialize_population(self):
         for _ in range(self.population_size):
@@ -22,23 +24,23 @@ class Population:
         counter = 0
         generation_number = 1
         prev_best = 0
+
         prev_avg = 0
 
         while True:
-            print(f"Номер поколения: {generation_number}\t")
+            print(f"Generation Number: {generation_number}\t")
             new_population = []
-            parent_pool = []
             prev_best = max(individual.get_fitness() for individual in self.individuals) or 0
             prev_avg = sum(individual.get_fitness() for individual in self.individuals) / len(self.individuals) or 0
             self.print_info()
-
-            count = GlobalParameters.PARENTPOOL_SIZE
-            parent_pool = self.roulette(count)
+            self.maxpoints[generation_number] = max(individual.get_fitness() for individual in self.individuals) or 0
+            self.avgpoints[generation_number] =  sum(individual.get_fitness() for individual in self.individuals) / len(self.individuals) or 0
+            parent_pool = self.roulette(GlobalParameters.PARENTPOOL_SIZE)
 
             for i in range(GlobalParameters.PARENTPOOL_SIZE):
                 for j in range(GlobalParameters.PARENTPOOL_SIZE):
                     if i != j:
-                        new_individual = self.crossover(parent_pool[i], parent_pool[j])
+                        new_individual = self.double_crossover(parent_pool[i], parent_pool[j])
                         new_population.append(new_individual)
                 if len(new_population) >= self.population_size:
                     break
@@ -47,7 +49,8 @@ class Population:
             generation_number += 1
 
             best_growth = max(individual.get_fitness() for individual in self.individuals) - prev_best
-            avg_growth = sum(individual.get_fitness() for individual in self.individuals) / len(self.individuals) - prev_avg
+            avg_growth = sum(individual.get_fitness() for individual in self.individuals) / len(
+                self.individuals) - prev_avg
 
             if -0.02 <= best_growth <= 0.02:
                 counter += 1
@@ -59,9 +62,8 @@ class Population:
             else:
                 print("\033[H\033[2J")
 
-        print("Решение найдено!")
+        print("Solution found!")
         return generation_number
-
     def double_crossover(self, parent1, parent2):
         crossover_point1 = self.random.randint(1, 12)
         crossover_point2 = self.random.randint(crossover_point1 + 1, 23)
@@ -140,6 +142,7 @@ class Population:
     def roulette(self, pull_size):
         popul = list(self.individuals)
         pull = []
+
         individuals_for_selection = popul[:]
 
         individuals_for_selection.sort(key=lambda x: x.get_fitness(), reverse=True)
@@ -181,3 +184,8 @@ class Population:
 
         print(f"Средняя fitness: {avg_fitness}")
         print(f"Лучшая fitness: {max_fitness}")
+    def get_avgpoints(self):
+        return self.avgpoints
+    def get_maxpoints(self):
+        return self.maxpoints
+

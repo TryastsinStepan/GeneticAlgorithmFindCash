@@ -1,18 +1,18 @@
 from Individual import  *
 #Файл, содержащий вспомогательные методы для кодирования и декодирования хромосом
 #Метод для кодирования объекта Individual в строку хромосомы
-def encode_individual_to_chromosome(invividual:Individual) -> str:
+def encode_individual_to_chromosome(invividual) -> str:
     #Преобразование весов объекта Individual в двоичный формат их представления
-    weight_1_binary = bin(invividual.get_weight1())[2:]
-    weight_2_binary = bin(invividual.get_weight2())[2:]
-    weight_3_binary = bin(invividual.get_weight3())[2:]
+    weight_1_binary = '0'*(8-len(bin(invividual.get_weight1())[2:])) + bin(invividual.get_weight1())[2:]
+    weight_2_binary = '0'*(8-len(bin(invividual.get_weight2())[2:]))+ bin(invividual.get_weight2())[2:]
+    weight_3_binary = '0'*(8-len(bin(invividual.get_weight3())[2:])) + bin(invividual.get_weight3())[2:]
 
     #Объединение двоичных представлений весов в одну строку хромосомы
     chromosome = weight_1_binary+weight_2_binary+weight_3_binary
     return chromosome #Возвращает строку хромосомы
 
 #Метод для декодирования строки хромосомы в объект Individual
-def decode_chromosome_to_individual(chromosome:str) -> Individual:
+def decode_chromosome_to_individual(chromosome:str):
     #Разделение строки хромосомы на три части, соответствующие весам Individual
     weight_1_binary = chromosome[:8]
     weight_2_binary = chromosome[8:16]
