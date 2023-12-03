@@ -1,2 +1,3 @@
-import matplotlib.pyplot as plt
-import numpy as np
+
+x = 15
+print(bin(x)[2:])
